@@ -20,9 +20,9 @@ public class Magpie4
 {
 	String[] keywords = {"favorite", "team", "player", "finals", "win"};
 
-	String[] teams = {"Golden State Warriors", "Cleveland Cavaliers", "Los Angeles Lakers", "Los Angeles Clippers", "Milwaukee Bucks", "Dallas Mavericks"};
+	List<String> teams = new ArrayList<String>(Arrays.asList("Golden State Warriors", "Cleveland Cavaliers", "Los Angeles Lakers", "Los Angeles Clippers", "Milwaukee Bucks", "Dallas Mavericks"));
 
-	String[] players = {"Stephen Curry", "Lebron James", "Ja Morant", "Luka Doncic", "Michael Jordan", "Kobe Bryant", "Lamelo Ball"};
+	List<String> players = new ArrayList<String>(Arrays.asList("Stephen Curry", "Lebron James", "Ja Morant", "Luka Doncic", "Michael Jordan", "Kobe Bryant", "Lamelo Ball"));
 
 	List<String> randomQuestions = new ArrayList<String>(Arrays.asList("Who's your favorite player?", "Who's your favorite team?", "Who do you think will win the finals this year?", "Who do you think is going to win MVP this year?"));
 	/**
@@ -33,6 +33,67 @@ public class Magpie4
 	{
 		return "Hello, let's talk. My name is Samarth 2.0 and I like basketball. I love the NBA as well.";
 	}
+
+	public String getResponse(String statement, int questionsAsked) {
+		int currentState = parseInput(statement, questionsAsked);
+		String response = "";
+		Random rand = new Random();
+
+		switch (currentState) {
+			case 1: 
+				response = "I don't feel like talking to you anymore";
+			case 2: 
+				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+			case 3: 
+				response = "Say something, please.";
+			case 4: 
+				response = "My favorite player is " + players.get(rand.nextInt(players.size()));
+			case 5: 
+				response = "My favorite team is the " +teams.get(rand.nextInt(teams.size()));
+			case 6: 
+				response = "The Golden State Warriors won the 2022 NBA Championship";
+			case 7: 
+				response = "The best team in the league right now is whoever your favorite team is, just kidding ur team sucks, Lakers are better !!!";
+			case 8: 
+				response = "The ball used in the NBA is called a basketball!";
+			case 9: 
+				response = "Ja Morant won this award last year";
+			case 10: 
+				response = "Yea its chef curry with the pot, hitting three's like a dot";
+			case 11: 
+				response = "The best rapper in the NBA is Damian Lillard";
+			case 12: 
+				response = "The best DJ in the NBA is Shaq";
+			case 13: 
+				response = "Nikola Jokic won the MVP last year, I think Luka Doncic is going to win this year";
+			case 14: 
+				response = "My top 5 of all time and current players is Brian Scalabrine, Javale Mcgee, Zaza Pachulia, Dennis Schroder, and Russell Westbrook";
+			case 15: 
+				response = "Why so negative?";
+			case 16: 
+				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+			case 17: 
+				response = "Tell me more about your family.";
+			case 18: 
+				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+			case 19: 
+				response = transformIWantToStatement(statement);
+			case 20: 
+				response = transformYouMeStatement(statement);
+			case 21: 
+				response = getClarification();
+			case 22: 
+				response = rewriteClarification(statement);
+			case 23: 
+				response = getRandomResponse();
+			
+			
+		}
+
+		return response;
+	}
+
+	
 	
 	/**
 	 * Gives a response to a user statement
@@ -41,63 +102,59 @@ public class Magpie4
 	 *            the user statement
 	 * @return a response based on the rules given
 	 */
-	public String getResponse(String statement, int questionsAsked)
+	public int parseInput(String statement, int questionsAsked)
 	{	double n = Math.random();
 		int stopTalking = (int)(n * 50);
 
 
-		String response = "";
-		Random rand = new Random();
-
 		if (stopTalking == 1) {
-			response = "I don't feel like talking to you anymore";
+			return 1;
 		}
 		else if (statement.length() == 0)
 		{
 			if (questionsAsked >= 5) {
-				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+				return 2; 
 			} else {
-			response = "Say something, please.";
+			return 3; 
 			}
-			System.out.println(questionsAsked);
 		} else if (findKeyword(statement, "favorite") >= 0) {
 			if (findKeyword(statement, "player") >= 0) {
-				response = "My favorite player is Stephen Curry";
+				return 4; 
 			}
 			else if (findKeyword(statement, "team") >= 0) {
-				response = "My favorite team is the Golden State Warriors";
+				return 5; 
 			}
 		}
 		else if (findKeyword(statement, "finals") >= 0) {
-			response = "The Golden State Warriors won the 2022 NBA Championship";
+			return 6; 
 			}
 		else if (findKeyword(statement, "best") >= 0) {
-			response = "The best team in the league right now is whoever your favorite team is, just kidding ur team sucks, Lakers are better !!!";
+			return 7;
 		} 
 		else if (findKeyword(statement, "ball") >= 0) {
-			response = "The ball used in the NBA is called a basketball!";
+			return 8; 
 		} 
 		else if (findKeyword(statement, "Most Improved") >= 0) {
-			response = "Ja Morant won this award last year";
+			return 9; 
 		}
 		else if (findKeyword(statement, "Curry") >= 0){
-			response = "Yea its chef curry with the pot, hitting three's like a dot";
+			return 10; 
 		}
 		else if (findKeyword(statement, "rap") >= 0) {
-			response = "The best rapper in the NBA is Damian Lillard";
+			return 11;
 		}
 		else if (findKeyword(statement, "DJ") >= 0) {
-			response = "The best DJ in the NBA is Shaq";
+			return 12;
 		}
 		
 		else if (findKeyword(statement, "MVP") >= 0) {
-			response = "Nikola Jokic won the MVP last year, I think Luka Doncic is going to win this year";
+			return 13; 
 		} else if (findKeyword(statement, "top 5") >= 0 || findKeyword(statement, "top five") >= 0) {
-			response = "My top 5 of all time and current players is Brian Scalabrine, Javale Mcgee, Zaza Pachulia, Dennis Schroder, and Russell Westbrook";
+			return 14;
 		}
 		else if (findKeyword(statement, "no") >= 0)
 		{
-			response = "Why so negative?";
+			return 15; 
 		}
 		else if (findKeyword(statement, "mother") >= 0
 				|| findKeyword(statement, "father") >= 0
@@ -105,9 +162,9 @@ public class Magpie4
 				|| findKeyword(statement, "brother") >= 0)
 		{
 			if (questionsAsked >= 5) {
-				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+				return 16;
 			} else {
-			response = "Tell me more about your family.";
+				return 17;
 			}
 		}
 
@@ -115,10 +172,10 @@ public class Magpie4
 		else if (findKeyword(statement, "I want to", 0) >= 0)
 		{
 			if (questionsAsked >= 5) {
-				response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+				return 18;
 
 			} else {
-			response = transformIWantToStatement(statement);
+				return 19; 
 			}
 		}
 
@@ -131,7 +188,7 @@ public class Magpie4
 			if (psn >= 0
 					&& findKeyword(statement, "me", psn) >= 0)
 			{
-				response = transformYouMeStatement(statement);
+				return 20;
 			}
 			else
 			{
@@ -139,20 +196,19 @@ public class Magpie4
 					double r = Math.random();
 					int randomChoice = (int)(r * 3);
 				
-					response = rewriteClarification(statement);
 					if (randomChoice == 0) {
-						response = "Let's talk about the NBA. " + randomQuestions.get(rand.nextInt(randomQuestions.size()));
+						return 2;
 					} else if (randomChoice == 1) {
-						response = getClarification();
+						return 21;
 					} else if (randomChoice == 2) {
-						response = rewriteClarification(statement);
+						return 22;
 					}
 				} else {
-				response = getRandomResponse();
+					return 23;
 				}
 			}
 		}
-		return response;
+		return 0;
 	}
 
 	private String getClarification() {
